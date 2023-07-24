@@ -4,6 +4,7 @@
 
 import requests
 
+
 def get_employee_todo_list_progress(employee_id):
     """
     Fetches and displays the TODO list progress for a given employee ID.
@@ -32,9 +33,11 @@ def get_employee_todo_list_progress(employee_id):
         # Extract relevant information from the data.
         employee_name = employee_data['name']
         total_tasks = len(todos_data)
-        done_tasks = sum(1 for todo in todos_data if todo['completed'])
+        done_tasks = sum(1 for todo in todos_data 
+            if todo['completed'])
         todo_titles = [todo['title'] for todo in todos_data if todo['completed']]
-
+        
+        
         # Print the employee's TODO list progress in the specified format.
         print(f"Employee {employee_name} is done with tasks({done_tasks}/{total_tasks}):")
         for title in todo_titles:
