@@ -2,8 +2,9 @@
 """ This script uses REST API to retrieve the task completed
     by a given employee ID, then exports it to a csv file """
 
-import requests
 import csv
+import requests
+from sys import argv
 
 def get_employee_todo_list_progress(employee_id):
 
