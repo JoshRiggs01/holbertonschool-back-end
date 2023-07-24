@@ -30,7 +30,8 @@ def get_employee_todo_list_progress(employee_id):
                        todo in todos_data if todo['completed']]
 
         # Print the employee's TODO list progress in the specified format.
-        print(f"Employee {employee_name} is done with tasks({done_tasks}/{total_tasks}):")
+        print(f"Employee {employee_name} is done
+            with tasks({done_tasks}/{total_tasks}):")
         for title in todo_titles:
             print(f"\t{title}")
 
@@ -38,13 +39,15 @@ def get_employee_todo_list_progress(employee_id):
         file_name = f"{employee_id}.csv"
         with open(file_name, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+            writer.writerow(["USER_ID", "USERNAME",
+                            "TASK_COMPLETED_STATUS", "TASK_TITLE"])
             for todo in todos_data:
                 user_id = todo['userId']
                 username = employee_data['username']
                 task_completed_status = todo['completed']
                 task_title = todo['title']
-                writer.writerow([user_id, username, task_completed_status, task_title])
+                writer.writerow([user_id, username,
+                                task_completed_status, task_title])
         print(f"Data exported to {file_name} successfully.")
     except requests.exceptions.RequestException as e:
         print("Error fetching data:", e)
