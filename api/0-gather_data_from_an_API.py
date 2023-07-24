@@ -9,6 +9,7 @@ def get_employee_todo_list_progress(employee_id):
     """Fetches and displays the TODO list progress for a given employee ID.
     :param employee_id: The ID of the employee to retrieve TODO list progress.
     :type employee_id: int"""
+    
     base_url = 'https://jsonplaceholder.typicode.com'
     employee_url = f'{base_url}/users/{employee_id}'
     todos_url = f'{base_url}/todos?userId={employee_id}'

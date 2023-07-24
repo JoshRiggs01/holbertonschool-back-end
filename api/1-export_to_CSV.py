@@ -6,6 +6,7 @@ import requests
 import csv
 
 def get_employee_todo_list_progress(employee_id):
+
     """Fetches and displays the TODO list progress for a given employee ID.
     :param employee_id: The ID of the employee to retrieve TODO list progress.
     :type employee_id: int"""
