@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+""" This script uses REST API to retrieve the task completed
+    by a given employee ID, then exports it to a csv file """
+
 import requests
 import csv
 
