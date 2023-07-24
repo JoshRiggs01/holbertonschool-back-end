@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+""" This script uses REST API to retrieve the task completed
+    by a given employee ID """
+
 import requests
 
 def get_employee_todo_list_progress(employee_id):
