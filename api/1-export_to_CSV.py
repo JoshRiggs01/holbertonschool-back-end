@@ -7,51 +7,52 @@ import requests
 from sys import argv
 
 
-def get_employee_todo_list_progress(employee_id):
+def toDo():
+    """ Function exports todo list to a csv file """
+    emp_id = int(argv[1])
+    todo_url = f"https://jsonplaceholder.typicode.com/users/{emp_id}/todos"
+    id_response = requests.get(todo_url)
 
-    """Fetches and displays the TODO list progress for a given employee ID."""
-    base_url = 'https://jsonplaceholder.typicode.com'
-    employee_url = f'{base_url}/users/{employee_id}'
-    todos_url = f'{base_url}/todos?userId={employee_id}'
+    if id_response.status_code == 200:
+        todo_data = id_response.json()
+        done_tasks = sum(1 for item in todo_data if item["completed"])
+        total_tasks = len(todo_data)
 
-    try:
-        employee_response = requests.get(employee_url)
-        todos_response = requests.get(todos_url)
-        employee_response.raise_for_status()
-        todos_response.raise_for_status()
+        emp_name_url = "https://jsonplaceholder.typicode.com/users"
+        name_response = requests.get(emp_name_url)
 
-        employee_data = employee_response.json()
-        todos_data = todos_response.json()
+        if name_response.status_code == 200:
+            name_data = name_response.json()
+            for user in name_data:
+                if user["id"] == emp_id:
+                    usr_name = user["username"]
+        else:
+            print("Error: Unable to fetch data.")
 
-        employee_name = employee_data['name']
-        total_tasks = len(todos_data)
-        done_tasks = sum(1 for todo in todos_data if todo['completed'])
-        todo_titles = [todo['title'] for
-                       todo in todos_data if todo['completed']]
+        todo_list = []
+        for item in todo_data:
+            todo_list.append({
+                "USER_ID": emp_id,
+                "USERNAME": usr_name,
+                "TASK_COMPLETED_STATUS":
+                ("True" if item['completed'] else "False"),
+                "TASK_TITLE": item['title']
+            })
 
-        # Print the employee's TODO list progress in the specified format.
-        print(f"Employee {employee_name} is done
-            with tasks({done_tasks}/{total_tasks}):")
-        for title in todo_titles:
-            print(f"\t{title}")
+        with open(f'{emp_id}.csv', mode='w', newline='') as file:
+            fieldnames = [
+                "USER_ID",
+                "USERNAME",
+                "TASK_COMPLETED_STATUS",
+                "TASK_TITLE"
+                ]
+            csv_writer = csv.DictWriter(file, fieldnames=fieldnames,
+                                        quoting=csv.QUOTE_ALL)
+            csv_writer.writerows(todo_list)
 
-        # Export the data to CSV format
-        file_name = f"{employee_id}.csv"
-        with open(file_name, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["USER_ID", "USERNAME",
-                            "TASK_COMPLETED_STATUS", "TASK_TITLE"])
-            for todo in todos_data:
-                user_id = todo['userId']
-                username = employee_data['username']
-                task_completed_status = todo['completed']
-                task_title = todo['title']
-                writer.writerow([user_id, username,
-                                task_completed_status, task_title])
-        print(f"Data exported to {file_name} successfully.")
-    except requests.exceptions.RequestException as e:
-        print("Error fetching data:", e)
+    else:
+        print("Error: Unable to fetch data.")
 
-if __name__ == '__main__':
-    employee_id = int(input("Enter the employee ID: "))
-    get_employee_todo_list_progress(employee_id)
+
+if __name__ == "__main__":
+    toDo()
